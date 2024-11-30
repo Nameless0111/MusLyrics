@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список песен</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Выравниваем содержимое по левому краю */
+        }
+
+        .header {
+            width: 100%; /* Занимает всю ширину */
+            text-align: center; /* Центрируем текст */
+            margin-top: 20px; /* Отступ сверху */
+            font-size: 24px; /* Размер шрифта для заголовка */
+        }
+
+        h1 {
+            margin-top: 20px; /* Отступ сверху для заголовка списка песен */
+            text-align: left; /* Выравниваем заголовок по левому краю */
+            width: 100%; /* Занимает всю ширину */
+        }
+
+        .search-form {
+            margin-top: 20px; /* Отступ сверху для формы поиска */
+            text-align: left; /* Выравниваем форму поиска по левому краю */
+            width: 100%; /* Занимает всю ширину */
+        }
+
+        .greeting {
+            text-align: right;
+            width: 100%; /* Занимает всю ширину */
+            margin-top: 10px; /* Отступ сверху для приветствия */
+        }
+
+        .admin-button {
+            display: inline-block; /* Чтобы кнопка выглядела как кнопка */
+            margin-left: 10px; /* Отступ слева от кнопки "Выйти" */
+            padding: 5px 10px; /* Отступы внутри кнопки */
+            font-size: 14px; /* Размер шрифта для кнопки */
+            background-color: #007BFF; /* Цвет фона кнопки (можно изменить) */
+            color: white; /* Цвет текста кнопки */
+            border: none; /* Убираем границы у кнопки */
+            border-radius: 5px; /* Скругление углов кнопки */
+            cursor: pointer; /* Курсор в виде указателя при наведении */
+        }
+
+        .admin-button:hover {
+            background-color: #0056b3; /* Цвет фона при наведении (можно изменить) */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="/" style="text-decoration: none; color: black;">FakeGenius</a> <!-- Надпись "FakeGenius" по центру -->
+    </div>
+
+    {% if user.is_authenticated %}
+        <div class="greeting">
+            <span>Привет, {{ user.username }}!</span>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Выйти</button>
+            </form>
+
+            {% if user.is_superuser %}
+                <a href="/admin/" class="admin-button">Admin</a> <!-- Кнопка для перехода в админ-панель -->
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <h1>Список песен</h1>
+
+    <form method="GET" action="{% url 'song_list' %}" class="search-form">
+        <input type="text" name="q" placeholder="Поиск по названию или исполнителю..." required>
+        <button type="submit">Поиск</button>
+    </form>
+
+    <ul>
+        {% if songs %}
+            {% for song in songs %}
+                <li>
+                    <a href="{% url 'song_detail' song.id %}">{{ song.title }} - {{ song.artist }}</a>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li>Нет результатов для вашего запроса.</li> <!-- Сообщение об отсутствии результатов -->
+        {% endif %}
+    </ul>
+</body>
+</html>
