@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ author.name }}</title>
+</head>
+<body>
+    <h1>{{ author.name }}</h1>
+    <p>Биография: {{ author.biography }}</p>
+
+    <h2>Песни:</h2>
+    <ul>
+        {% for song in author.songs.all %}
+            <li><a href="{% url 'song_detail' song.id %}">{{ song.title }}</a></li>
+        {% empty %}
+            <li>У этого автора пока нет песен.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'song_list' %}">Вернуться к списку песен</a>
+</body>
+</html>

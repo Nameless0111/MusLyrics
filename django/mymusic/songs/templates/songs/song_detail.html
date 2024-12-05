@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ song.title }}</title>
+</head>
+<body>
+    <h1>{{ song.title }}</h1>
+    <p>Исполнитель: <a href="{% url 'author_detail' song.artist %}">{{ song.artist }}</a></p>
+    <p>Альбом: {{ song.album }}</p>
+    <p>Год выпуска: {{ song.release_year }}</p>
+    <h2>Текст песни:</h2>
+    <pre>{{ song.lyrics }}</pre>
+
+    <a href="{% url 'song_list' %}">Вернуться к списку песен</a>
+</body>
+</html>
